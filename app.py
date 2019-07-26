@@ -43,7 +43,7 @@ def get_hotel_detail(href):
     new_tab.get(href)
     
     try:
-        WebDriverWait(new_tab, 30).until(
+        WebDriverWait(new_tab, 10).until(
             EC.presence_of_element_located((By.XPATH, '//div[@id="reviewSection"]'))
         )
     except Exception:
@@ -90,26 +90,27 @@ def get_hotel_detail(href):
 
 if __name__ == "__main__":
     mongodb = pymongo.MongoClient(MONGO_CONNECTION_STRING)
+    db = mongodb[MONGO_DB_NAME]
+    hotels = db['agoda']
     signal.signal(signal.SIGTERM, lambda : mongodb.close())  # Close db connection if receive termination
 
     try:
         for msg in consumer:
-            db = mongodb[MONGO_DB_NAME]
-
             topic = msg.topic
             offset = msg.offset
-            consumer.commit()
-            hotels = db['agoda']
 
             body = msg.value.decode('utf-8')
             body = json.loads(body)['body']
             
             hotel_href = body.get('href')
-            detail = get_hotel_detail(hotel_href)
-            hotel_id = detail.get('id')
+            try:
+                detail = get_hotel_detail(hotel_href)
+                hotel_id = detail.get('id')
 
-            hotels.update_one({"_id": hotel_id}, {"$set": detail}, upsert=True)
-            logging.info("Hotel: " + json.dumps(detail))
+                hotels.update_one({"_id": hotel_id}, {"$set": detail}, upsert=True)
+                logging.info("Hotel: " + json.dumps(detail))
+            except Exception as e:
+                traceback.print_exc()
 
     except Exception as e:
         mongodb.close()

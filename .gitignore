@@ -1,0 +1,12 @@
+.DS_Store
+.vscode/settings.json
+*.pyc
+.ipynb_checkpoints/
+my_model/
+.vscode/
+.idea/
+build/
+models/flight
+models/hotel
+models/parser
+models/classifier

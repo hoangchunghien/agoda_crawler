@@ -46,7 +46,7 @@ def craw_agoda_detail(href):
     new_tab.get(href)
     
     try:
-        WebDriverWait(new_tab, 10).until(
+        WebDriverWait(new_tab, 30).until(
             EC.presence_of_element_located((By.XPATH, '//div[@id="reviewSection"]'))
         )
     except Exception:

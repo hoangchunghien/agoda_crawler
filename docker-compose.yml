@@ -24,4 +24,19 @@ services:
     ports:
       - '27017:27017'
 
+  crawler:
+    build: .
+    network_mode: host
+    restart: always
+    environment: 
+      - KAFKA_HOST=localhost:9092
+      - KAFKA_AGODA_TOPIC=agoda_crawler
+      - KAFKA_FINDHOTELS_TOPIC=findhotesl_crawler
+      - KAFKA_CONSUMER_GROUP=CrawlerGroup
+      - MONGO_CONNECTION_STRING=mongodb://localhost:27017
+      - MONGO_DB_NAME=Hotels
+    depends_on: 
+      - kafka
+      - mongo
+
   

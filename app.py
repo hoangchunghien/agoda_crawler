@@ -50,12 +50,13 @@ def craw_agoda_detail(href):
             EC.presence_of_element_located((By.XPATH, '//div[@id="reviewSection"]'))
         )
     except Exception:
+        logging.info(new_tab.page_source)
         traceback.print_exc()
     
     # print(new_tab.requests)
     reqs = [req for req in new_tab.requests \
             if req.method == 'GET' and len(re.findall('agoda.com/api/en-us/pageparams/property?', req.path))]
-    # print(reqs)
+    logging.info(reqs)
     detail = reqs[-1].response
     body = detail.body
     info = json.loads(body)

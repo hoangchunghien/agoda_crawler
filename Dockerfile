@@ -20,6 +20,7 @@ RUN pip install kafka-python==1.4.6
 RUN pip install selenium==3.141.0
 RUN pip install selenium-wire==1.0.5
 RUN pip install pymongo==3.8.0
+RUN pip install requests==2.22.0
 
 # Bundle app source
 COPY . .

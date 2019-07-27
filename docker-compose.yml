@@ -33,6 +33,15 @@ services:
     ports:
       - '27017:27017'
 
+  jupyter:
+    image: ufoym/deepo:all-jupyter
+    restart: always
+    ports:
+      - '8888:8888'
+    command: jupyter notebook --allow-root --NotebookApp.token=TJyvCGJNV7z8B76DKsAP9iHxjBwa --notebook-dir='/root' --ip=0.0.0.0 --no-browser
+    volumes: 
+      - 'jupyter-data:/root'
+
   crawler:
     build: .
     network_mode: host
@@ -51,5 +60,5 @@ volumes:
   zookeeper_data:
   kafka_data:
   mongo-data:
-
+  jupyter-data:
   
